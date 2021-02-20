@@ -1,0 +1,27 @@
+
+select {
+  margin: 20px 0;
+}
+
+.time2 {
+  display: none;
+}
+
+.h3 {
+  display: none;
+}
+
+p {
+  color: white;
+  margin: 20px 0;
+}
+
+.time2-active {
+  display: block;
+}
+
+.form { 
+  padding: 20px;
+  border-radius: 10px;
+  background-color: green;
+}
