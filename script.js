@@ -4,6 +4,7 @@ const time = document.querySelector('.time');
 const title = document.querySelector('.h3');
 const num = document.querySelector('#num');
 const travelTime = 50;
+console.log('hello')
 
 const arrTimeBA = ['18:30','18:45','19:00','19:15','19:35','21:50','21:55'];
 const arrTimeAB = ['18:00','18:30','18:45','19:00','19:15','21:00'];
@@ -45,23 +46,17 @@ route.addEventListener('change', function() {
     time.name = 'timeBA';
     createOption(arrTimeBA, '(из B в A)', time);
 
-    arrTimeBA.forEach( element => {
-      const option = document.createElement('option');
-      option.value = element;
-      option.textContent = element + '(из В в А)';
-      time.append(option);
-    });
+   
    };
   if(this.childNodes[5].value === this.value) {
-    calculationTime.call(time);
-    title.classList.add('time2-active'); 
-    time2.classList.add('time2-active');
-    time2.innerHTML = '';
-    createOption(arrTimeBA, '(из B в A)', time2);
     time.innerHTML = '';
     time.name = 'timeAB';
     createOption(arrTimeAB, '(из A в B)', time)
     time.addEventListener('change', calculationTime)
+    time2.innerHTML = '';
+    title.classList.add('time2-active'); 
+    time2.classList.add('time2-active');
+    calculationTime.call(time);
     return
   }
   title.classList.remove('time2-active');

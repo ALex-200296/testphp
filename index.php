@@ -2,36 +2,43 @@
   $message = '';
   $ticket = 700;
   $ticketBack = 1200;
-  $traveltTime = 50;
   $sum = 0;  
   function calculate($post) {
     $back = ((int) substr($post, 0, 2) * 60 * 60) + (int)substr($post, 3, 2) * 60 + (50 * 60);
     return $back = sprintf('%02d:%02d', ($back / 3600), ($back / 60 % 60));
   };
+
+  function message($num, $sum, $dir, $calTime, $route, $calBack = '') {
+    $BA = '';
+    $back = '';
+    $traveltTime = '50 минут';
+    $routeDir = ($route === 'BA') ? 'В в А' : 'А в В';
+    if($route === 'ABA') {
+      $back = 'и обратно';
+      $traveltTime = '1 час 40 минут';
+      $BA = "<p> Обратно теплоход отправляется в {$_POST['time2']}, а прибудет в $calBack.</p>";
+    }
+    return  "<p>Вы выбрали $num билета по маршруту из $routeDir $back стоимостью $sum.<p>
+    <p>Это путешествие займет у вас $traveltTime.</p> 
+    <p>Теплоход отправляется в $dir, а прибудет в $calTime.</p>
+    $BA";
+  };
   if(isset($_POST['submit'])) {
     if($_POST['route'] === 'AB') {
       $sum = $_POST['num'] * $ticket;
       $cal = calculate($_POST['timeAB']);
-      $message = "<p>Вы выбрали {$_POST['num']} билета по маршруту из A в B стоимостью $sum.<p>
-                  <p>Это путешествие займет у вас $traveltTime минут.</p> 
-                  <p>Теплоход отправляется в {$_POST['timeAB']}, а прибудет в $cal.</p>";
+      $message = message($_POST['num'],  $sum, $_POST['timeAB'],  $cal, $_POST['route']);
     } 
     if($_POST['route'] === 'BA') {
       $sum = $_POST['num'] * $ticket;
       $cal = calculate($_POST['timeBA']);
-        $message = "<p>Вы выбрали {$_POST['num']} билета по маршруту из В в А стоимостью $sum.<p>
-                    <p>Это путешествие займет у вас $traveltTime минут.</p> 
-                    <p>Теплоход отправляется в {$_POST['timeBA']}, а прибудет в $cal.</p>";
+      $message = message($_POST['num'],  $sum, $_POST['timeBA'],  $cal, $_POST['route']);
     }
     if($_POST['route']  === 'ABA') {
       $sum = $_POST['num'] * $ticketBack;
       $cal = calculate($_POST['timeAB']);
       $calBack = calculate($_POST['time2']);
-      $message = "<p>Вы выбрали {$_POST['num']} билета по маршруту из A в B стоимостью $sum р.<p>
-                  <p>Это путешествие займет у вас из пункта A в B $traveltTime минут.</p>
-                  <p>Теплоход отправляется из пункта А в В в {$_POST['timeAB']}, а прибудет в $cal.</p>
-                  <p>И из пункта B в A $traveltTime минут.</p>  
-                  <p> Обратно теплоход отправляется в {$_POST['time2']}, а прибудет в $calBack.</p>";
+      $message = message($_POST['num'],  $sum,  $_POST['timeAB'],  $cal, $_POST['route'], $calBack );
     }
   }
 ?>
@@ -45,21 +52,21 @@
   <title>Document</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="./style2.css">
-  <script defer src="./script2.js"></script>
+  <script defer src="./script.js"></script>
 </head>
 <body>
   <h1>Задание №1</h1>
-  <table class="table">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">id</th>
         <th scope="col">event_id</th>
         <th scope="col">event_date</th>
-        <th scope="col">ticket_adult_price</th>
+        
         <th scope="col">ticket_adult_quantity</th>
-        <th scope="col">ticket_kid_price</th>
+        
         <th scope="col">ticket_kid_quantity</th>
-        <th scope="col">ticket_type</th>
+        <th scope="col">id_type</th>
         <th scope="col">barcode</th>
         <th scope="col">user_id</th>
         <th scope="col">equal_price</th>
@@ -71,11 +78,11 @@
         <th scope="row">1</th>
         <td>003</td>
         <td>2021-08-21 13:00:00</td>
-        <td>600</td>
+       
         <td>1</td>
-        <td>300</td>
+        
         <td>1</td>
-        <td>group</td>
+        <td>1</td>
         <td>31436111</td>
         <td>00451</td>
         <td>700</td>
@@ -83,13 +90,13 @@
       </tr>
       <tr>
         <th scope="row">1</th>
-        <td>003</td>
+        <td>006</td>
         <td>2021-08-21 13:00:00</td>
-        <td>550</td>
+       
         <td>4</td>
-        <td>250</td>
+        
         <td>2</td>
-        <td>preferential</td>
+        <td>2</td>
         <td>41436111</td>
         <td>00451</td>
         <td>700</td>
@@ -97,31 +104,75 @@
       </tr>
       <tr>
         <th scope="row">1</th>
-        <td>003</td>
+        <td>009</td>
         <td>2021-08-21 13:00:00</td>
-        <td>700</td>
+       
         <td>0</td>
-        <td>450</td>
+        
         <td>1</td>
-        <td>kids</td>
+        <td>3</td>
         <td>21111111</td>
         <td>00451</td>
         <td>700</td>
         <td>2021-01-11 13:22:09</td>
       </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped" style="margin-top: 60px;">
+    <thead>
+      <tr>
+        <th scope="col">id_type</th>
+        <th scope="col">type</th>
+        <th scope="col">id_price</th>
+      </tr>
+    </thead>
+    <tbody>
       <tr>
         <th scope="row">1</th>
-        <td>003</td>
-        <td>2021-08-21 13:00:00</td>
-        <td>700</td>
+        <td>usual</td>
         <td>1</td>
-        <td>450</td>
-        <td>0</td>
-        <td>adult</td>
-        <td>11111111</td>
-        <td>00451</td>
+        
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>group</td>
+        <td>2</td>
+        
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>preferential</td>
+        <td>3</td>
+        
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped" style="margin-top: 60px;">
+    <thead>
+      <tr>
+        <th scope="col">id_price</th>
+        <th scope="col">ticket_adult_price</th>
+        <th scope="col">ticket_kid_price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>1000</td>
+        <td>800</td>
+        
+      </tr>
+      <tr>
+        <th scope="row">2</th>
         <td>700</td>
-        <td>2021-01-11 13:22:09</td>
+        <td>450</td>
+        
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>600</td>
+        <td>300</td>
+        
       </tr>
     </tbody>
   </table>
